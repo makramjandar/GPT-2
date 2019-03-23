@@ -9,7 +9,7 @@ import numpy as np
 import tensorflow as tf
 import time
 
-import model, sample, encoder
+import model, sample, encoder_sp as encoder
 from load_dataset import load_dataset, Sampler
 from accumulate import AccumulatingOptimizer
 
@@ -22,7 +22,7 @@ parser = argparse.ArgumentParser(
     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
 parser.add_argument('--dataset', metavar='PATH', type=str, required=True, help='Input file, directory, or glob pattern (utf-8 text, or preencoded .npz files).')
-parser.add_argument('--model_name', metavar='MODEL', type=str, default='117M', help='Pretrained model name')
+parser.add_argument('--model_name', metavar='MODEL', type=str, default='117MSP', help='Pretrained model name')
 parser.add_argument('--combine', metavar='CHARS', type=int, default=50000, help='Concatenate input files with <|endoftext|> separator into chunks of this minimum size')
 
 parser.add_argument('--batch_size', metavar='SIZE', type=int, default=1, help='Batch size')
@@ -108,8 +108,9 @@ def main():
                 os.path.join('models', args.model_name))
         else:
             ckpt = tf.train.latest_checkpoint(args.restore_from)
-        print('Loading checkpoint', ckpt)
-        saver.restore(sess, ckpt)
+        if ckpt is not None:
+            print('Loading checkpoint', ckpt)
+            saver.restore(sess, ckpt)
 
         print('Loading dataset...')
         chunks = load_dataset(enc, args.dataset, args.combine)

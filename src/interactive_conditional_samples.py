@@ -6,7 +6,7 @@ import os
 import numpy as np
 import tensorflow as tf
 
-import model, sample, encoder
+import model, sample, encoder_sp as encoder
 
 def interact_model(
     model_name='117M',
@@ -61,7 +61,7 @@ def interact_model(
         )
 
         saver = tf.train.Saver()
-        ckpt = tf.train.latest_checkpoint(os.path.join('models', model_name))
+        ckpt = tf.train.latest_checkpoint('checkpoint/run1')
         saver.restore(sess, ckpt)
 
         while True:

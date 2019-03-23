@@ -28,6 +28,10 @@ def load_dataset(enc, path, combine):
             with np.load(path) as npz:
                 for item in npz.files:
                     token_chunks.append(npz[item])
+        elif path.endswith('.ids'):
+            with open(path, 'r') as ids:
+                tokens = np.stack(list(map(int, filter(None, ids.read().replace('\n', ' ').split(' ')))))
+                token_chunks.append(tokens)
         else:
             # Plain text
             with open(path, 'r') as fp:
