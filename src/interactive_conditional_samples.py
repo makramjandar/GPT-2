@@ -61,7 +61,7 @@ def interact_model(
         )
 
         saver = tf.train.Saver()
-        ckpt = tf.train.latest_checkpoint('checkpoint/run1')
+        ckpt = tf.train.latest_checkpoint(os.path.join('models', model_name, 'checkpoint/run1'))
         saver.restore(sess, ckpt)
 
         while True:

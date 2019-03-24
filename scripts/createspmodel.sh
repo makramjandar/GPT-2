@@ -1,0 +1,22 @@
+#!/bin/sh
+
+if [ -z "$2" ]
+then
+  echo "Usage: $0 <input file> <token count>"
+  echo "Creates a sentence piece model from <input file> named 'sp' of size <token count>."
+  echo "You can reuse the model for similar data (same language). hparams.json contains the model parameters for training,"
+  echo "put it to the model directory together with sp.model and sp.vocab"
+  exit 1
+fi
+
+INPUT=$(readlink -f "$1")
+TOKENS=$2
+
+spm_train --input "$INPUT" --model_prefix=sp --vocab_size=$TOKENS --model_type=bpe --user_defined_symbols '<|n|>' --max_sentence_length=16384
+echo '{
+  "n_vocab": '$TOKENS',
+  "n_ctx": 1024,
+  "n_embd": 768,
+  "n_head": 12,
+  "n_layer": 12
+}' > hparams.json

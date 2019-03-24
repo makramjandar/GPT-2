@@ -6,7 +6,7 @@
 import argparse
 import numpy as np
 
-import encoder
+import encoder_sp as encoder
 from load_dataset import load_dataset
 
 parser = argparse.ArgumentParser(

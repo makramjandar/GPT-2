@@ -6,7 +6,7 @@ import os
 import numpy as np
 import tensorflow as tf
 
-import model, sample, encoder
+import model, sample, encoder_sp as encoder
 
 def sample_model(
     model_name='117M',
@@ -52,13 +52,13 @@ def sample_model(
 
         output = sample.sample_sequence(
             hparams=hparams, length=length,
-            start_token=enc.encoder['<|endoftext|>'],
+            start_token=enc.encode('<|n|>')[0],
             batch_size=batch_size,
             temperature=temperature, top_k=top_k
         )[:, 1:]
 
         saver = tf.train.Saver()
-        ckpt = tf.train.latest_checkpoint(os.path.join('models', model_name))
+        ckpt = tf.train.latest_checkpoint(os.path.join('models', model_name, 'checkpoint/run1'))
         saver.restore(sess, ckpt)
 
         generated = 0

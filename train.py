@@ -13,9 +13,7 @@ import model, sample, encoder_sp as encoder
 from load_dataset import load_dataset, Sampler
 from accumulate import AccumulatingOptimizer
 
-CHECKPOINT_DIR = 'checkpoint'
 SAMPLE_DIR = 'samples'
-
 
 parser = argparse.ArgumentParser(
     description='Fine-tune GPT-2 on your custom dataset.',
@@ -55,6 +53,7 @@ def main():
         raise ValueError(
             "Can't get samples longer than window size: %s" % hparams.n_ctx)
 
+    CHECKPOINT_DIR = os.path.join('models', args.model_name, 'checkpoint')
     config = tf.ConfigProto()
     config.gpu_options.allow_growth = True
     with tf.Session(config=config) as sess:
@@ -190,7 +189,7 @@ def main():
                             avg_loss[1] * 0.99 + 1.0)
 
                 print(
-                    '[{counter} | {time:2.2f}] loss={loss:2.2f} avg={avg:2.2f}'
+                    '[{counter} | {time:2.2f}] loss={loss:2.4f} avg={avg:2.4f}'
                     .format(
                         counter=counter,
                         time=time.time() - start_time,
