@@ -7,25 +7,22 @@ then
   exit 1
 fi
 
-if [ -z "$(which unoconv)" ]
+if [ -z "$(which xsltproc)" ]
 then
-  echo "Please install unoconv and OpenOffice/LibreOffice"
+  echo "Please install xsltproc"
   exit 2
 fi
 
 INPUT=$(readlink -f "$1")
 OUTPUT=$(readlink -f "$2")
 mkdir -p "$OUTPUT"
-unoconv -l&
-UNOPID=$!
-sleep 1
+cd "$(dirname "$0")"
 for i in "$INPUT/"*.fb2
 do
   TXT=$OUTPUT/$(basename "$i" .fb2).txt
   if [ ! -f "$TXT" ]
   then
-    unoconv -c "socket,host=localhost,port=2002;urp;StarOffice.ComponentContext" -f txt -o "$TXT" "$i"
-    sed -i '1s/^\xEF\xBB\xBF//' "$TXT" # remove BOM
+    echo "Processing $i"
+    xsltproc FB2_2_txt.xsl "$i" > "$TXT"&
   fi
 done
-kill $UNOPID
