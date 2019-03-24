@@ -20,7 +20,15 @@ MODEL="$2"
 OUTPUT="$3"
 
 cd "$(dirname "$0")/.."
+SPLITDIR=$(mktemp -d splitXXXXX)
 OUTDIR=$(mktemp -d outXXXXX)
-trap "rm -rf $OUTDIR" INT TERM EXIT
-spm_encode --model="models/$MODEL/sp.model" --output_format=id < "$INPUT" | split --lines=100000 --additional-suffix=.ids - "$OUTDIR"/part
+trap "rm -rf $OUTDIR $SPLITDIR" INT TERM EXIT
+split -n l/$(nproc) --additional-suffix=.txt "$INPUT" "$SPLITDIR"/part
+i=1
+for SP in "$SPLITDIR"/part*
+do
+  spm_encode --model="models/$MODEL/sp.model" --output_format=id < "$SP" | split --lines=100000 --additional-suffix=.ids - "$OUTDIR"/part$(printf %05d $i)&
+  i=$(( i + 1 ))
+done
+wait
 PYTHONPATH=src ./encode.py --model_name="$MODEL" "$OUTDIR" "models/$MODEL/$OUTPUT"
