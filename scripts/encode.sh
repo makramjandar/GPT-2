@@ -5,8 +5,14 @@ then
   echo "Usage: $0 <input file> <model dir> <output file>"
   echo "Creates an .npz file from text <input file> using sp.model found inside models/<model dir> and stores the result as models/<model dir>/<output file>"
   echo "Provide just the model name like 117M_Books, not thet full path!"
-echo "If you use tensorflow_gpu you might want to provide CUDA libs path in LD_LIBRARY_PATH for this script to run. If there are no import errors about libcublas, you're fine."
+  echo "If you use tensorflow_gpu you might want to provide CUDA libs path in LD_LIBRARY_PATH for this script to run. If there are no import errors about libcublas, you're fine."
   exit 1
+fi
+
+if [ -z "$(which spm_encode)" ]
+then
+  echo "Please download, build and install Sentence Piece from https://github.com/google/sentencepiece"
+  exit 2
 fi
 
 INPUT=$(readlink -f "$1")
