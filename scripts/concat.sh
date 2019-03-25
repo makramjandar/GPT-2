@@ -9,5 +9,4 @@ fi
 
 INPUT=$(readlink -f "$1")
 OUTPUT=$(readlink -f "$2")
-cat "$INPUT"/*.txt > "$OUTPUT"
-sed -i ':a;N;$!ba;s#\n#<|n|>\n#g' "$OUTPUT"
+cat "$INPUT"/*.txt | sed 's#$#<|n|>#g' > "$OUTPUT"
