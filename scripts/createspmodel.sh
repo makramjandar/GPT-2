@@ -18,7 +18,7 @@ fi
 INPUT=$(readlink -f "$1")
 TOKENS=$2
 
-spm_train --input "$INPUT" --model_prefix=sp --vocab_size=$TOKENS --model_type=bpe --control_symbols '<|n|>' --max_sentence_length=16384
+spm_train --input "$INPUT" --model_prefix=sp --vocab_size=$TOKENS --model_type=bpe --user_defined_symbols '<|n|>,<|endoftext|>' --max_sentence_length=16384
 echo '{
   "n_vocab": '$TOKENS',
   "n_ctx": 1024,
