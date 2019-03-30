@@ -86,3 +86,5 @@ We are still considering release of the larger models.
 ## License
 
 [MIT](./LICENSE)
+
+FB2_2_txt.xsl conversion file is forked from https://github.com/kmrov/fb2_2_rtf
