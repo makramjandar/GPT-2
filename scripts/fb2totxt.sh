@@ -17,12 +17,14 @@ INPUT=$(readlink -f "$1")
 OUTPUT=$(readlink -f "$2")
 mkdir -p "$OUTPUT"
 cd "$(dirname "$0")"
-for i in "$INPUT/"*.fb2
+N=$(nproc)
+(for i in "$INPUT/"*.fb2
 do
   TXT=$OUTPUT/$(basename "$i" .fb2).txt
   if [ ! -f "$TXT" ]
   then
-    echo "Processing $i"
-    xsltproc FB2_2_txt.xsl "$i" > "$TXT"&
+    echo "Processing $i" >&2
+    echo "-o \"$TXT\" FB2_2_txt.xsl \"$i\""
   fi
-done
+done) | xargs -P $N -n 4 xsltproc
+wait
