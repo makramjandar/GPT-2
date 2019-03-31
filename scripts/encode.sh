@@ -23,7 +23,9 @@ cd "$(dirname "$0")/.."
 SPLITDIR=$(mktemp -d splitXXXXX)
 OUTDIR=$(mktemp -d outXXXXX)
 trap "rm -rf $OUTDIR $SPLITDIR" INT TERM EXIT
+echo "Splitting $INPUT into $(nproc) parts for parallel processing..."
 split -n l/$(nproc) --additional-suffix=.txt "$INPUT" "$SPLITDIR"/part
+echo "Done. Encoding with spm started..."
 i=1
 for SP in "$SPLITDIR"/part*
 do
@@ -31,4 +33,6 @@ do
   i=$(( i + 1 ))
 done
 wait
+echo "Done. Loading the data and packing into $OUTPUT"
 PYTHONPATH=src ./encode.py --model_name="$MODEL" "$OUTDIR" "models/$MODEL/$OUTPUT"
+echo "Done."
