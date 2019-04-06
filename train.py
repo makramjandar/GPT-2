@@ -33,6 +33,7 @@ parser.add_argument('--sample_every', metavar='N', type=int, default=100, help='
 parser.add_argument('--sample_length', metavar='TOKENS', type=int, default=1023, help='Sample this many tokens')
 parser.add_argument('--sample_num', metavar='N', type=int, default=1, help='Generate this many samples')
 parser.add_argument('--save_every', metavar='N', type=int, default=1000, help='Write a checkpoint every N steps')
+parser.add_argument('--average_steps', metavar='N', type=int, default=100, help='Average the loss value across N steps')
 
 
 def maketree(path):
@@ -166,6 +167,7 @@ def main():
         start_time = time.time()
 
         try:
+            avg_coeff = 1 - 1 / args.average_steps
             while True:
                 if counter % args.save_every == 0:
                     save()
@@ -185,8 +187,8 @@ def main():
 
                 summary_log.add_summary(v_summary, counter)
 
-                avg_loss = (avg_loss[0] * 0.99 + v_loss,
-                            avg_loss[1] * 0.99 + 1.0)
+                avg_loss = (avg_loss[0] * avg_coeff + v_loss,
+                            avg_loss[1] * avg_coeff + 1.0)
 
                 print(
                     '[{counter} | {time:2.2f}] loss={loss:2.4f} avg={avg:2.4f}'
