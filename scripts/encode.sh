@@ -40,7 +40,7 @@ N=$(nproc)
 mkdir -p "models/$MODEL/$OUTPUT"
 (for EP in "$OUTDIR"/*
 do
-  echo \""$EP"\" \""models/$MODEL/$OUTPUT/$i.npz"\"
+  echo \""$EP"\" \""models/$MODEL/$OUTPUT/`printf %08d $i`.npz"\"
   i=$(( i + 1 ))
 done) | xargs -P $N -n 2 ./encode.py --model_name="$MODEL"
 echo "Done."
