@@ -15,17 +15,19 @@ do
   ENC=$(sed 's#>#>\n#g' "$i" | sed -n "s#.*encoding=[\"']\([^\"']*\)[\"'].*#\1#p" | head -1)
   if [ -n "$ENC" ]
   then
-    BOOKLANG=$(iconv -f $ENC < "$i" | sed -n "s#.*<lang>\([^<]*\)</lang>.*#\1#gp" | head -1)
+    BOOKLANG=$(iconv -f $ENC < "$i" | grep -o '<lang>[^<]*</lang>' | sed -n "s#.*<lang>\([^<]*\)</lang>.*#\1#gp" | head -1)
     if [ -z "$BOOKLANG" ]
     then
-      echo "Undefined language: $i"
+      echo "Undefined language: $i" >&2
     fi
     if [ "$BOOKLANG" = "$1" ]
     then
-      echo "$i language match"
-      mv "$i" "$OUTPUT/$(basename "$i")"
+      echo "$i language match" >&2
+      mv "$i" "$OUTPUT/$(basename "$i")"&
     fi
   else
-    echo "Undefined encoding: $i"
+    echo "Undefined encoding: $i" >&2
   fi
 done
+
+wait

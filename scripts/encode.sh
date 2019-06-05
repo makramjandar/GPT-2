@@ -2,7 +2,7 @@
 
 if [ -z "$3" ]
 then
-  echo "Usage: $0 <input file> <model dir> <output file>"
+  echo "Usage: $0 <input file> <model dir> <output dir>"
   echo "Creates an .npz file from text <input file> using sp.model found inside models/<model dir> and stores the result as models/<model dir>/<output file>"
   echo "Provide just the model name like 117M_Books, not thet full path!"
   echo "If you use tensorflow_gpu you might want to provide CUDA libs path in LD_LIBRARY_PATH for this script to run. If there are no import errors about libcublas, you're fine."
@@ -34,5 +34,13 @@ do
 done
 wait
 echo "Done. Loading the data and packing into $OUTPUT"
-PYTHONPATH=src ./encode.py --model_name="$MODEL" "$OUTDIR" "models/$MODEL/$OUTPUT"
+i=1
+export PYTHONPATH=src
+N=$(nproc)
+mkdir -p "models/$MODEL/$OUTPUT"
+(for EP in "$OUTDIR"/*
+do
+  echo \""$EP"\" \""models/$MODEL/$OUTPUT/$i.npz"\"
+  i=$(( i + 1 ))
+done) | xargs -P $N -n 2 ./encode.py --model_name="$MODEL"
 echo "Done."
