@@ -9,4 +9,9 @@ fi
 
 INPUT=$(readlink -f "$1")
 OUTPUT=$(readlink -f "$2")
-cat "$INPUT"/*.txt | sed 's#$#<|n|>#g' > "$OUTPUT"
+rm "$OUTPUT"
+for f in "$INPUT"/*.txt
+do
+  cat "$f" | sed 's#$#<|n|>#g' >> "$OUTPUT"
+  echo "<|endoftext|>" >> "$OUTPUT"
+done
