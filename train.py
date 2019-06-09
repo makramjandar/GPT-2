@@ -34,6 +34,7 @@ parser.add_argument('--sample_length', metavar='TOKENS', type=int, default=1023,
 parser.add_argument('--sample_num', metavar='N', type=int, default=1, help='Generate this many samples')
 parser.add_argument('--save_every', metavar='N', type=int, default=1000, help='Write a checkpoint every N steps')
 parser.add_argument('--average_steps', metavar='N', type=int, default=100, help='Average the loss value across N steps')
+parser.add_argument('--average_start', metavar='N', type=float, default=0, help='Set initial average value to prevent lagging behind')
 
 
 def maketree(path):
@@ -90,10 +91,7 @@ def main():
         summary_log = tf.summary.FileWriter(
             os.path.join(CHECKPOINT_DIR, args.run_name))
 
-        saver = tf.train.Saver(
-            var_list=train_vars,
-            max_to_keep=5,
-            keep_checkpoint_every_n_hours=2)
+        saver = tf.train.Saver()
         sess.run(tf.global_variables_initializer())
 
         if args.restore_from == 'latest':
@@ -112,10 +110,23 @@ def main():
             print('Loading checkpoint', ckpt)
             saver.restore(sess, ckpt)
 
+        saver = tf.train.Saver(
+            max_to_keep=5)
         print('Loading dataset...')
         chunks = load_dataset(enc, args.dataset, args.combine)
         data_sampler = Sampler(chunks)
         print('dataset has', data_sampler.total_size, 'tokens')
+        total_parameters = 0
+        for variable in tf.trainable_variables():
+            # shape is an array of tf.Dimension
+            shape = variable.get_shape()
+            variable_parameters = 1
+            for dim in shape:
+                variable_parameters *= dim.value
+            total_parameters += variable_parameters
+
+        print("The model has", total_parameters, "parameters")
+
         print('Training...')
 
         counter = 1
@@ -140,7 +151,7 @@ def main():
                 fp.write(str(counter) + '\n')
 
         def generate_samples():
-            context_tokens = data_sampler.sample(1)
+            context_tokens = data_sampler.sample(128)
             all_text = []
             index = 0
             while index < args.sample_num:
@@ -164,6 +175,8 @@ def main():
             return [data_sampler.sample(1024) for _ in range(args.batch_size)]
 
         avg_loss = (0.0, 0.0)
+        if args.average_start != 0:
+            avg_loss = (args.average_start * args.average_steps, args.average_steps)
         start_time = time.time()
 
         try:
