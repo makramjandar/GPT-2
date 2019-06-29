@@ -8,6 +8,10 @@ import tensorflow as tf
 
 import model, sample, encoder_sp as encoder
 
+try:
+    import readline
+except:
+    pass
 
 def interact_model(
     model_name='117M',

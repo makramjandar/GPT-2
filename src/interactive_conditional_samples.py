@@ -5,6 +5,10 @@ import json
 import os
 import numpy as np
 import tensorflow as tf
+try:
+    import readline
+except:
+    pass
 
 import model, sample, encoder_sp as encoder
 
