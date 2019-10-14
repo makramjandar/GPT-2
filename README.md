@@ -2,17 +2,6 @@
 
 # gpt-2
 Code ["Language Models are Unsupervised Multitask Learners"](https://d4mucfpksywv.cloudfront.net/better-language-models/language-models.pdf). | [README](https://github.com/openai/gpt-2/blob/master/README.md). | [Development](https://github.com/openai/gpt-2/blob/master/DEVELOPERS.md) | [Contributors](https://github.com/openai/gpt-2/blob/master/CONTRIBUTORS.md) | License [MIT](./LICENSE)
-
-## Citation
-
-Please use the following bibtex entry:
-```
-@article{radford2019language,
-  title={Language Models are Unsupervised Multitask Learners},
-  author={Radford, Alec and Wu, Jeff and Child, Rewon and Luan, David and Amodei, Dario and Sutskever, Ilya},
-  year={2019}
-}
-```
 _________________________________________________________________________________________________________________
 ### Fine tuning on custom datasets
 
