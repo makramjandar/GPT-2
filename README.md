@@ -30,15 +30,6 @@ mpirun -np 4 \
     /home/jovyan/gpt-2/train-horovod.py --dataset encoded.npz
 ```
 
-## GPT-2 samples
-
-| WARNING: Samples are unfiltered and may contain offensive content. |
-| --- |
-
-While we have not yet released GPT-2 itself, you can see some samples from it in the `gpt-2-samples` folder.
-We show unconditional samples with default settings (temperature 1 and no truncation), with temperature 0.7, and with truncation with top_k 40.
-We show conditional samples, with contexts drawn from `WebText`'s test set, with default settings (temperature 1 and no truncation), with temperature 0.7, and with truncation with top_k 40.
-
 ## Citation
 
 Please use the following bibtex entry:
