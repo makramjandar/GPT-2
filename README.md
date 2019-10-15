@@ -1,5 +1,9 @@
 **Status:** Archive (code is provided as-is, no updates expected)
 
+> In the Beginning was the Command Line.
+>
+> -- <cite>Neal Stephenson</cite>
+
 # GPT-2
 Code ["Language Models are Unsupervised Multitask Learners"](https://d4mucfpksywv.cloudfront.net/better-language-models/language-models.pdf). | [README](https://github.com/openai/gpt-2/blob/master/README.md). | [Development](https://github.com/openai/gpt-2/blob/master/DEVELOPERS.md) | [Contributors](https://github.com/openai/gpt-2/blob/master/CONTRIBUTORS.md) | License [MIT](./LICENSE)
 _________________________________________________________________________________________________________________
