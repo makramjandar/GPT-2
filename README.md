@@ -1,6 +1,6 @@
 **Status:** Archive (code is provided as-is, no updates expected)
 
-# gpt-2
+# GPT-2
 Code ["Language Models are Unsupervised Multitask Learners"](https://d4mucfpksywv.cloudfront.net/better-language-models/language-models.pdf). | [README](https://github.com/openai/gpt-2/blob/master/README.md). | [Development](https://github.com/openai/gpt-2/blob/master/DEVELOPERS.md) | [Contributors](https://github.com/openai/gpt-2/blob/master/CONTRIBUTORS.md) | License [MIT](./LICENSE)
 _________________________________________________________________________________________________________________
 ### Fine tuning on custom datasets
